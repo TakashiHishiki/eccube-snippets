@@ -1,27 +1,17 @@
 # EC-CUBE Snippets
 
-EC-CUBE 4系の開発を効率化するVSCode拡張機能です。  
-`ec` と打ち始めるだけで、Twig・PHP・YAMLのスニペットが補完候補に表示されます。  
-各スニペットには日本語・英語の説明がツールチップで表示されます。
-
-[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/colscenery.eccube-snippets?label=VS%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets)
+[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/colscenery.eccube-snippets?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
 
----
+EC-CUBE 4系の開発を効率化する VS Code 拡張機能です。  
+`ec` と打ち始めるだけで、Twig・PHP・YAML のスニペットが補完候補に表示されます。  
+各スニペットには日本語・英語の説明がツールチップで表示されます。
 
 ## インストール
 
-**拡張機能マーケットプレイス（Visual Studio Marketplace）からインストールできます。**  
-👉 [EC-CUBE Snippets - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets)
+[拡張機能マーケットプレイス](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets) からインストールできます。
 
-または、VS Code 内で以下の手順でインストールできます。
-
-1. VS Code を開き、`Ctrl+P`（macOS: `Cmd+P`）でクイックオープンを起動
-2. 以下のコマンドを貼り付けて Enter を押す
-
-```
-ext install colscenery.eccube-snippets
-```
+VS Code の拡張機能ビューで `EC-CUBE Snippets` を検索してもインストールできます。
 
 ---
 
@@ -180,6 +170,74 @@ PHPスニペットには `<?php` が含まれていません。`<?php` タグの
 | `eccube_plugin_class` | PluginManagerクラスの雛形 |
 | `eccube_event_subscriber` | テンプレートイベントSubscriberの雛形 |
 
+### actionメソッド（Action Methods）
+
+EC-CUBE 4.3（Symfony 6.4）の書き方に準拠したactionメソッドの雛形スニペットです。  
+`@Route` / `@Template` アノテーションと `isCsrfTokenValid()` によるCSRF検証がセットで展開されます。
+
+| プレフィックス | 説明 |
+|---|---|
+| `eccube_action_get` | GETのみのactionメソッド（一覧表示など） |
+| `eccube_action_get_post` | GET/POST対応・フォーム付きactionメソッド（登録画面など） |
+| `eccube_action_post` | POSTのみのactionメソッド（`isCsrfTokenValid` によるCSRF検証付き） |
+| `eccube_action_delete` | DELETEアクション（CSRF検証・EntityManager削除） |
+| `eccube_action_json` | Ajax用JSONレスポンスactionメソッド（CSRF検証付き） |
+| `eccube_action_detail` | パスパラメータ（`{id}`）付き詳細表示actionメソッド |
+| `eccube_action_edit` | パスパラメータ付き編集（GET/POST）actionメソッド |
+
+**EC-CUBE 4.3 / Symfony 6.4 の主な記述ルール**
+
+- ルーティングは `@Route` アノテーション形式（`Symfony\Component\Routing\Annotation\Route`）
+- テンプレート指定は `@Template` アノテーション（`Sensio\Bundle\FrameworkExtraBundle\Configuration\Template`）
+- CSRFトークン検証は `$this->isCsrfTokenValid('intention', $token)` を使用
+- コンストラクターインジェクションは `private readonly` プロモーション形式
+
+**展開例（`eccube_action_get_post`）**
+
+```php
+/**
+ * @Route("/plugin/route_path", name="route_name", methods={"GET", "POST"})
+ * @Template("@PluginCode/template.twig")
+ */
+public function index(Request $request): array|RedirectResponse
+{
+    $form = $this->createForm(FormType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $this->addSuccess('登録しました。', 'admin');
+
+        return $this->redirectToRoute('route_name');
+    }
+
+    return [
+        'form' => $form->createView(),
+    ];
+}
+```
+
+**展開例（`eccube_action_delete`）**
+
+```php
+/**
+ * @Route("/plugin/route_path/{id}/delete", name="route_name_delete", methods={"DELETE"})
+ */
+public function delete(Request $request, Entity $entity): RedirectResponse
+{
+    $token = $request->request->get('_token');
+    if (!$this->isCsrfTokenValid('delete', $token)) {
+        throw $this->createAccessDeniedException();
+    }
+
+    $this->entityManager->remove($entity);
+    $this->entityManager->flush();
+
+    $this->addSuccess('削除しました。', 'admin');
+
+    return $this->redirectToRoute('route_name');
+}
+```
+
 ### Entityプロパティ（Entity Properties）
 
 | プレフィックス | 説明 |
@@ -231,6 +289,6 @@ MIT
 
 ---
 
-## リポジトリ・不具合報告
+## 不具合報告
 
-https://github.com/TakashiHishiki/eccube-snippets
+不具合や機能要望は [Issues](https://github.com/TakashiHishiki/eccube-snippets/issues) からお願いします。
