@@ -1,17 +1,24 @@
 # EC-CUBE Snippets
 
-[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/colscenery.eccube-snippets?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.txt)
-
-EC-CUBE 4系の開発を効率化する VS Code 拡張機能です。  
-`ec` と打ち始めるだけで、Twig・PHP・YAML のスニペットが補完候補に表示されます。  
+EC-CUBE 4系の開発を効率化するVSCode拡張機能です。  
+`ec` と打ち始めるだけで、Twig・PHP・YAMLのスニペットが補完候補に表示されます。  
 各スニペットには日本語・英語の説明がツールチップで表示されます。
+
+[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/colscenery.eccube-snippets?label=VS%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.txt)
+
+---
 
 ## インストール
 
-[拡張機能マーケットプレイス](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets) からインストールできます。
+**拡張機能マーケットプレイス**からインストールできます。  
+[https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets](https://marketplace.visualstudio.com/items?itemName=colscenery.eccube-snippets)
 
-VS Code の拡張機能ビューで `EC-CUBE Snippets` を検索してもインストールできます。
+またはVS Codeのクイックオープン（`Ctrl+P`）で以下を貼り付けて実行してください。
+
+```
+ext install colscenery.eccube-snippets
+```
 
 ---
 
@@ -51,7 +58,6 @@ PHPスニペットには `<?php` が含まれていません。`<?php` タグの
 | `eccube_asset_user_data_download` | ダウンロード用アセットURL生成 |
 | `eccube_asset_save_image_conditional` | save_image配下の画像を条件付き表示 |
 | `eccube_asset_no_image_product` | no_image_productフィルターで商品画像を表示 |
-| `eccube_product_image` | NO IMAGEフォールバック付き商品画像 |
 
 ### テンプレート構造（Template）
 
@@ -289,6 +295,6 @@ MIT
 
 ---
 
-## 不具合報告
+## 不具合報告・ご要望
 
-不具合や機能要望は [Issues](https://github.com/TakashiHishiki/eccube-snippets/issues) からお願いします。
+[https://github.com/TakashiHishiki/eccube-snippets/issues](https://github.com/TakashiHishiki/eccube-snippets/issues)
